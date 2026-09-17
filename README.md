@@ -1,5 +1,7 @@
 # Baizhi Cloud Agent Toolkit
 
+> **Official repository update (2026-09-17):** ongoing integration maintenance and new contributions are hosted at [chaitin/baizhi-agent-toolkit](https://github.com/chaitin/baizhi-agent-toolkit). Please use its documentation and issue tracker as the official source. This earlier personal repository is retained for historical releases and existing references; it is not a second independent official development line. The MCP endpoint is unchanged. The existing personal Registry entry remains available while the organization entry is prepared and verified; this notice does not claim that Registry publication or client migration has completed. Existing Gemini installations are not automatically moved to the new repository.
+
 Client integrations for [Baizhi Cloud Agent Toolkit](https://baizhi.cloud/landing/agent-toolkit), maintained by the Baizhi Cloud team through [@ct-jaryn](https://github.com/ct-jaryn).
 
 Connect an agent to web search, webpage parsing and structured extraction through one hosted MCP endpoint. The service also offers visual, developer and specialist tools; availability depends on your key's permissions and the current service catalog.
@@ -46,7 +48,7 @@ Search/page tools can consume credits. Optional image generation, cloud executio
 
 ## Maintenance and support
 
-Report integration problems in [GitHub Issues](https://github.com/ct-jaryn/baizhi-agent-toolkit/issues), including the client version and a redacted error. Never include API keys or complete authorization headers. Use the service console for account, billing and private support.
+Report integration problems in the official [GitHub Issues](https://github.com/chaitin/baizhi-agent-toolkit/issues), including the client version and a redacted error. Never include API keys or complete authorization headers. Use the service console for account, billing and private support.
 
 We welcome collaboration with client maintainers and will adapt these integrations to their review requirements. “Maintained by Baizhi Cloud” does not mean an integration is verified, endorsed or maintained by Kilo, Cline, Google or the MCP Registry.
 
