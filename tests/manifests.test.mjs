@@ -45,3 +45,34 @@ test('Gemini points at the same endpoint with a secret variable and bounded tool
   const input = extension.settings.find((setting) => setting.envVar === 'BAIZHI_API_KEY');
   assert.equal(input.sensitive, true);
 });
+
+test('LobeHub plugin manifest matches the other clients', () => {
+  const plugin = json('lhm.plugin.json');
+  assert.equal(plugin.identifier, 'baizhi-agent-toolkit');
+  assert.equal(plugin.version, json('server.json').version);
+  // Every client must expose the same capability set, no more and no less.
+  const geminiTools = json('gemini-extension.json').mcpServers['baizhi-agent-toolkit'].includeTools;
+  assert.deepEqual(plugin.tools.map((tool) => tool.name).sort(), [...geminiTools].sort());
+  for (const tool of plugin.tools) {
+    assert.equal(tool.inputSchema.type, 'object');
+    assert.ok(tool.inputSchema.required.length > 0, `${tool.name} must require at least one argument`);
+    for (const name of tool.inputSchema.required) {
+      assert.ok(tool.inputSchema.properties[name], `${tool.name} requires undeclared ${name}`);
+    }
+    for (const [name, property] of Object.entries(tool.inputSchema.properties)) {
+      assert.ok(property.description, `${tool.name}.${name} needs a description`);
+    }
+  }
+});
+
+test('LobeHub manifest embeds no credential and names the hosted endpoint', () => {
+  const raw = readFileSync(new URL('../lhm.plugin.json', import.meta.url), 'utf8');
+  const plugin = JSON.parse(raw);
+  // It documents the hosted service and asks the user for their own key.
+  assert.match(plugin.description, /agent-toolkit\.app\.baizhi\.cloud\/mcp/);
+  assert.match(plugin.description, /own Baizhi API key/);
+  assert.match(plugin.description, /credits/);
+  // No credential literal may be committed.
+  assert.doesNotMatch(raw, /Bearer\s+[A-Za-z0-9._-]{8,}/);
+  assert.doesNotMatch(raw, /"(?:api[_-]?key|token|secret)"\s*:\s*"(?!Bearer\s*\{)[^"]+"/i);
+});

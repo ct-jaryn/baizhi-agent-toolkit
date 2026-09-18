@@ -1,0 +1,109 @@
+{
+  "identifier": "baizhi-agent-toolkit",
+  "name": "baizhi-agent-toolkit",
+  "version": "0.1.0",
+  "description": "Hosted web search, webpage reading and information extraction through the Baizhi Agent Toolkit. This server is a client for a hosted service: every call is forwarded to https://agent-toolkit.app.baizhi.cloud/mcp and requires the user's own Baizhi API key, which is sent as an Authorization Bearer header. Usage consumes that account's credits and may incur cost, so the tools are disabled unless you have configured your own key. Do not send internal addresses, credentialed links or sensitive data.",
+  "prompts": [],
+  "resources": [],
+  "tools": [
+    {
+      "name": "websearch_search",
+      "description": "Search public webpages through the hosted Baizhi Agent Toolkit. Inputs are sent to the hosted service and the call may consume service credits. Put site restrictions in the JSON domain filters, never as site: syntax inside query.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search terms, without site: filters."
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of results to return, an integer from 1 to 50.",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 10
+          },
+          "time_range": {
+            "type": "string",
+            "description": "Optional freshness filter.",
+            "enum": ["day", "week", "month", "year"]
+          },
+          "need_summary": {
+            "type": "boolean",
+            "description": "Request returned summaries. Enable only when needed; the hosted service may record returned summaries.",
+            "default": false
+          },
+          "domains_json": {
+            "type": "string",
+            "description": "Optional JSON array of bare domains or IPs to restrict results to, e.g. [\"example.com\"]."
+          },
+          "exclude_domains_json": {
+            "type": "string",
+            "description": "Optional JSON array of bare domains or IPs to exclude, e.g. [\"example.com\"]."
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "web_scrape",
+      "description": "Read one public webpage through the hosted Baizhi Agent Toolkit. The URL and inputs are sent to the hosted service and the call may consume service credits. Do not send internal addresses, credentialed links or sensitive data.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "One public HTTP or HTTPS webpage."
+          },
+          "accept_language": {
+            "type": "string",
+            "description": "Optional preferred language, such as zh-CN or en-US."
+          },
+          "return_format": {
+            "type": "string",
+            "description": "Return markdown or JSON. Defaults to markdown.",
+            "enum": ["markdown", "json"],
+            "default": "markdown"
+          },
+          "download": {
+            "type": "boolean",
+            "description": "Create a downloadable archive. Enable only when the user explicitly requests a download; this may create a remote artifact.",
+            "default": false
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "web_extract",
+      "description": "Extract specified information from one public webpage through the hosted Baizhi Agent Toolkit. Provide fields_json, an instruction, or both. Inputs are sent to the hosted service and the call may consume service credits.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "One public HTTP or HTTPS webpage."
+          },
+          "accept_language": {
+            "type": "string",
+            "description": "Optional preferred language, such as zh-CN or en-US."
+          },
+          "fields_json": {
+            "type": "string",
+            "description": "Optional JSON object mapping field names to string, number, boolean or array. Example: {\"title\":\"string\"}."
+          },
+          "instruction": {
+            "type": "string",
+            "description": "Describe the information to extract. Required when no fields are provided."
+          },
+          "download": {
+            "type": "boolean",
+            "description": "Create a downloadable archive. Enable only when the user explicitly requests a download; this may create a remote artifact.",
+            "default": false
+          }
+        },
+        "required": ["url"]
+      }
+    }
+  ]
+}
