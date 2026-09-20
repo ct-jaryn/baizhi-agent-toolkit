@@ -1,15 +1,24 @@
 {
-  "identifier": "baizhi-agent-toolkit",
-  "name": "baizhi-agent-toolkit",
-  "version": "0.1.0",
-  "description": "Hosted web search, webpage reading and information extraction through the Baizhi Agent Toolkit. This server is a client for a hosted service: every call is forwarded to https://agent-toolkit.app.baizhi.cloud/mcp and requires the user's own Baizhi API key, which is sent as an Authorization Bearer header. Usage consumes that account's credits and may incur cost. Configure a Bearer header in the client before connecting; this manifest does not store credentials or implement client-side disabling. Do not send internal addresses, credentialed links or sensitive data.",
-  "prompts": [],
-  "resources": [],
+  "provenance": {
+    "source": "work/agent-toolkit-tools.json",
+    "sha256": "5418472e0592a9761e2226a99057054ba5fc53fdfba089c3bf6ed04f8ab72eaa",
+    "capturedDate": "2026-09-16",
+    "status": "Historical sanitized discovery snapshot; not revalidated against production during prototype development"
+  },
+  "server": {
+    "name": "Agent 工具包",
+    "title": null,
+    "version": "1.0.0",
+    "description": null,
+    "website_url": null,
+    "icons": null
+  },
+  "protocol": "2025-11-25",
   "tools": [
     {
       "name": "websearch_search",
-      "description": "Search public webpages through the hosted Baizhi Agent Toolkit. Inputs are sent to the hosted service and the call may consume service credits. Put site restrictions in the filter.domains and filter.exclude_domains arrays, never as site: syntax inside query.",
-      "inputSchema": {
+      "description": "搜索公开网页并返回原始网页结果。适用于最新资讯、来源核验、官网或文档查询，以及多站点事实对比；不适用于本地代码分析、内部系统查询或纯推理任务。",
+      "input_schema": {
         "properties": {
           "count": {
             "default": 10,
@@ -64,16 +73,16 @@
         "type": "object"
       },
       "annotations": {
-        "readOnlyHint": false,
-        "destructiveHint": true,
-        "idempotentHint": false,
-        "openWorldHint": true
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": true
       }
     },
     {
       "name": "web_scrape",
-      "description": "Read one public webpage through the hosted Baizhi Agent Toolkit. The URL and inputs are sent to the hosted service and the call may consume service credits. Do not send internal addresses, credentialed links or sensitive data.",
-      "inputSchema": {
+      "description": "打开一个网页，返回整页正文。用户贴了链接并要看内容、总结、检查页面时用这个。一次只处理一个网址。默认返回 Markdown。",
+      "input_schema": {
         "properties": {
           "accept_language": {
             "description": "希望页面用哪种语言，例如 zh-CN。可不传。",
@@ -106,8 +115,8 @@
     },
     {
       "name": "web_extract",
-      "description": "Extract specified information from one public webpage through the hosted Baizhi Agent Toolkit. Provide fields, an instruction, or both. Inputs are sent to the hosted service and the call may consume service credits.",
-      "inputSchema": {
+      "description": "从一个网页里抽出指定信息，例如标题、价格、题目。不要用它读整页正文（那是 web_scrape）。不知道字段名时先调 web_suggest_fields，或把用户原话放进 instruction。",
+      "input_schema": {
         "properties": {
           "accept_language": {
             "description": "希望页面用哪种语言，例如 zh-CN。可不传。",
@@ -140,6 +149,6 @@
         "type": "object"
       }
     }
-  ],
-  "cloudEndpoint": "https://agent-toolkit.app.baizhi.cloud/mcp"
+  ]
 }
+

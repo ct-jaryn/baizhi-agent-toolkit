@@ -1,20 +1,30 @@
 # Pi
 
-Pi's core ships **no MCP support on purpose** — its README states "No MCP" and points users at extensions instead. There is no built-in configuration path, and no upstream change we could request: the project's contribution guide auto-closes issues and pull requests from new contributors and permanently blocks accounts that send agent-generated issue traffic. We are not opening an issue or a pull request there.
+Pi's core deliberately has no built-in MCP support; integrations use community
+extensions. Its [contribution guide](https://github.com/badlogic/pi-mono/blob/main/CONTRIBUTING.md)
+requires maintainer approval before a first PR and restricts automated issue
+traffic. Violations can lead to a block by that project; this is not a general
+GitHub-wide account ban. This guide does not require an upstream issue or PR.
 
 Instead, use the community adapter **[pi-mcp-adapter](https://github.com/nicobailon/pi-mcp-adapter)** (MIT, by nicobailon). It is third-party software, not affiliated with Pi or with Baizhi Cloud, and it supports what this server needs: a remote Streamable HTTP endpoint, custom headers, a bearer token, and an optional OS credential store.
 
 ## What was verified, and what was not
 
-Verified on 2026-09-18 against a local endpoint that reproduces this service's behaviour with a synthetic token (Bearer required on every request; 401 otherwise):
+The 2026-09-18 development record reports verification against a local endpoint that reproduces this service's behaviour with a synthetic token (Bearer required on every request; 401 otherwise):
 
 - The adapter applies the configured `Authorization` header, resolving `${VAR}` from the environment.
 - It completes a session against an auth-required endpoint: `initialize` → `notifications/initialized` → `tools/list` → `resources/list` → `prompts/list`.
 - No real key, no real account and no service credits were used. The live endpoint was never called during this check.
 
+**Evidence limit:** the original run did not preserve a runnable Pi-specific harness in this repository; it has not been independently reproduced by this guide update.
+
 **Not verified:** a real key against the live service, tool invocation, the OS credential-store path below, and `includeTools` filtering (the test server exposed exactly the three tools, so filtering was not exercised). Treat this guide as wiring-level evidence, not end-to-end acceptance.
 
 ## Setup
+
+Use Node.js 22.18 or newer for the adapter's token CLI. Check the installed
+Pi and adapter versions for any stricter runtime requirements. The adapter is
+third-party software; review its source and pin the version you approve.
 
 1. Create a least-privilege API key in the [Baizhi Cloud console](https://agent-toolkit.app.baizhi.cloud/).
 2. Install the adapter: `pi install npm:pi-mcp-adapter`.

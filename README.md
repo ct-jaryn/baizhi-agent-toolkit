@@ -25,6 +25,7 @@ Create a dedicated, least-privilege API key in the console. Start with search an
 - **Kilo Code:** marketplace submission and user-entered API key configuration are documented in [the Kilo guide](docs/kilo.md).
 - **Cline:** marketplace configuration and credential limitations are documented in [the Cline guide](docs/cline.md).
 - **Pi:** Pi has no built-in MCP support by design; setup through the community `pi-mcp-adapter` extension is documented in [the Pi guide](docs/pi.md).
+- **LobeHub:** the [catalog candidate and verification limits](docs/lobehub.md) document the prepared remote-server manifest; marketplace acceptance and authenticated client validation remain outstanding.
 - **Official MCP Registry:** [server.json](server.json) describes the remote service and its required secret input. Registration and marketplace acceptance are separate; neither is an endorsement by a client or by the MCP Registry.
 
 Marketplace entries may be pending review. Use only the installation methods documented for your installed client version, and do not assume a pending catalog entry is already available.

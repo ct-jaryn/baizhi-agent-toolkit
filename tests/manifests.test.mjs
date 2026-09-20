@@ -76,3 +76,19 @@ test('LobeHub manifest embeds no credential and names the hosted endpoint', () =
   assert.doesNotMatch(raw, /Bearer\s+[A-Za-z0-9._-]{8,}/);
   assert.doesNotMatch(raw, /"(?:api[_-]?key|token|secret)"\s*:\s*"(?!Bearer\s*\{)[^"]+"/i);
 });
+
+
+test('LobeHub uses the historical service input schemas without UI-only aliases', () => {
+  const plugin = json('lhm.plugin.json');
+  const snapshot = json('tests/fixtures/tools-history-2026-09-16.json');
+  assert.equal(plugin.cloudEndpoint, endpoint);
+  for (const tool of plugin.tools) {
+    const recorded = snapshot.tools.find((item) => item.name === tool.name);
+    assert.ok(recorded, `missing historical schema for ${tool.name}`);
+    assert.deepEqual(tool.inputSchema, recorded.input_schema);
+    for (const alias of ['domains_json', 'exclude_domains_json', 'fields_json']) {
+      assert.equal(tool.inputSchema.properties[alias], undefined);
+    }
+  }
+  assert.equal(plugin.tools.find((tool) => tool.name === 'websearch_search').annotations.readOnlyHint, false);
+});
